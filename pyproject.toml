@@ -6,14 +6,17 @@ authors = ["tx7do <yanglinbo@gmail.com>"]
 readme = "README.md"
 packages = [{ include = "fastapi_poetry_demo" }]
 
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry.dependencies]
 python = "^3.9"
 fastapi = "^0.100.0"
 uvicorn = "^0.23.1"
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
 
 [[tool.poetry.source]]
 name = "tsinghua"
