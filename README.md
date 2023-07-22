@@ -17,7 +17,7 @@ poetry export -f requirements.txt --output requirements-prod.txt --without-hashe
 run server app
 
 ```bash
-poetry run python fastapi_poetry_demo/main.py
+poetry run python app/main.py
 ```
 
 access Swagger UI:

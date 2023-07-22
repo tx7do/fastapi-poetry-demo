@@ -4,19 +4,43 @@ version = "0.1.0"
 description = ""
 authors = ["tx7do <yanglinbo@gmail.com>"]
 readme = "README.md"
-packages = [{ include = "fastapi_poetry_demo" }]
+packages = [
+    { include = "app" }
+]
 
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=1.0.0", "setuptools"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.dependencies]
+Babel = "*"
+aiofiles = "*"
+redis = "^4.2.0rc1"
+bcrypt = "*"
+fastapi = "*"
+jinja2 = "*"
 python = "^3.9"
-fastapi = "^0.100.0"
-uvicorn = "^0.23.1"
+python-multipart = "*"
+tortoise-orm = "*"
+uvicorn = { version = "*", extras = ["standard"] }
+pendulum = "*"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
+# test
+pytest = "*"
+pytest-asyncio = "*"
+pytest-mock = "*"
+pytest-xdist = "*"
+# lint
+black = "*"
+flake8 = "*"
+isort = "*"
+pylint = "*"
+# example
+asyncmy = "*"
+asyncpg = "*"
+python-dotenv = "*"
+mypy = "*"
 
 [[tool.poetry.source]]
 name = "tsinghua"
