@@ -7,9 +7,6 @@ from .base import BaseModel
 class User(BaseModel):
     name = fields.TextField()
 
-    def __str__(self):
-        return self.name
-
 
 User_Pydantic = pydantic_model_creator(User)
 User_Pydantic_List = pydantic_queryset_creator(User)
