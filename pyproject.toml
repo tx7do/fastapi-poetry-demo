@@ -24,6 +24,11 @@ python-multipart = "*"
 tortoise-orm = "*"
 uvicorn = { version = "*", extras = ["standard"] }
 pendulum = "*"
+aiomysql = "^0.2.0"
+pydantic = "<2.0.0"
+passlib = "^1.7.4"
+pyjwt = "^2.8.0"
+update = "^0.0.1"
 
 [tool.poetry.dev-dependencies]
 # test

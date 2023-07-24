@@ -6,7 +6,8 @@ from starlette.middleware.cors import CORSMiddleware
 
 from tortoise.contrib.fastapi import register_tortoise
 
-from app import settings
+from app.configs.app import get_app_settings
+from app.configs.db import get_db_settings
 from app.routers import include_router
 
 
@@ -14,8 +15,8 @@ from app.routers import include_router
 def create_app():
     # 创建fastapi
     _app = FastAPI(
-        title=settings.APP_TITLE,
-        description=settings.APP_DESCRIPTION
+        title=get_app_settings().APP_TITLE,
+        description=get_app_settings().APP_DESCRIPTION
     )
 
     # 添加CORS中间件
@@ -34,16 +35,10 @@ def create_app():
     # 注册Tortoise ORM
     register_tortoise(
         _app,
-        config={
-            "connections": {"default": settings.DATABASE_DSN},
-            "apps": {
-                "models": {
-                    "models": ["app.models"],
-                    "default_connection": "default",
-                }
-            },
-        },
+        db_url=get_db_settings().DATABASE_DSN,
+        modules={"models": ["app.models"]},
         generate_schemas=True,
+        add_exception_handlers=True
     )
 
     return _app
@@ -55,6 +50,7 @@ app = create_app()
 if __name__ == "__main__":
     uvicorn.run(
         app='main:app',
-        host="0.0.0.0", port=settings.SERVER_PORT,
+        host="0.0.0.0",
+        port=get_app_settings().SERVER_PORT,
         reload=True
     )
