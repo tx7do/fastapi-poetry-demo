@@ -1,25 +1,36 @@
 # fastapi-poetry-demo
 
-initial requirements
+## 技术栈
+
+- [Python](https://www.python.org/)
+- [Poetry](https://python-poetry.org/)
+- [FastAPI](https://fastapi.tiangolo.com/)
+- [Tortoise ORM](https://tortoise.github.io/)
+
+## 初始化项目，下载依赖项
 
 ```bash
 poetry install
 ```
 
-export config to requirements.txt
+## 导出依赖项配置到requirements.txt
 
 ```bash
 poetry export --output requirements.txt
+```
 
+不导出Hash：
+
+```bash
 poetry export -f requirements.txt --output requirements-prod.txt --without-hashes
 ```
 
-run server app
+## 运行服务
 
 ```bash
 poetry run python app/main.py
 ```
 
-access Swagger UI:
+## 访问API文档 Swagger UI
 
 <http://127.0.0.1:8000/docs>
