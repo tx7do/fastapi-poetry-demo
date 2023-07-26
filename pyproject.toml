@@ -36,6 +36,7 @@ pytest = "*"
 pytest-asyncio = "*"
 pytest-mock = "*"
 pytest-xdist = "*"
+httpx = "*"
 # lint
 black = "*"
 flake8 = "*"

@@ -28,7 +28,13 @@ poetry export -f requirements.txt --output requirements-prod.txt --without-hashe
 ## 运行服务
 
 ```bash
-poetry run python app/main.py
+poetry run python app/base.py
+```
+
+## 运行测试
+
+```bash
+pytest tests/unit -v -s
 ```
 
 ## 访问API文档 Swagger UI
