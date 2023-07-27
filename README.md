@@ -33,8 +33,21 @@ poetry run python3 app/base.py
 
 ## 运行测试
 
+测试全部用例：
+
+```bash
+pytest
+```
+
+测试API：
+
 ```bash
 pytest tests/api -v -s
+```
+
+测试数据库增删改查：
+
+```bash
 pytest tests/crud -v -s
 ```
 

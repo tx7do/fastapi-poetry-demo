@@ -10,13 +10,16 @@ from app.configs.app import get_app_settings
 from app.configs.db import get_db_settings
 from app.routers import include_router
 
+app_settings = get_app_settings()
+db_settings = get_db_settings()
+
 
 # 初始化服务端应用
 def create_app():
     # 创建fastapi
     _app = FastAPI(
-        title=get_app_settings().APP_TITLE,
-        description=get_app_settings().APP_DESCRIPTION
+        title=app_settings.APP_TITLE,
+        description=app_settings.APP_DESCRIPTION
     )
 
     # 添加CORS中间件
@@ -35,7 +38,7 @@ def create_app():
     # 注册Tortoise ORM
     register_tortoise(
         _app,
-        db_url=get_db_settings().DATABASE_DSN,
+        db_url=db_settings.DATABASE_DSN,
         modules={"models": ["app.models"]},
         generate_schemas=True,
         add_exception_handlers=True
@@ -51,6 +54,6 @@ if __name__ == "__main__":
     uvicorn.run(
         app='main:app',
         host="0.0.0.0",
-        port=get_app_settings().SERVER_PORT,
+        port=app_settings.SERVER_PORT,
         reload=True
     )

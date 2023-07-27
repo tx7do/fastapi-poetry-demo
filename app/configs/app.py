@@ -1,5 +1,6 @@
 from functools import lru_cache
-from pydantic import BaseSettings
+from typing import List, Union
+from pydantic import BaseSettings, AnyHttpUrl, validator
 
 
 class ApplicationSettings(BaseSettings):
