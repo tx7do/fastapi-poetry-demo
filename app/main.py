@@ -1,3 +1,5 @@
+from os import path
+
 from fastapi import FastAPI
 import uvicorn
 import redis.asyncio as redis
@@ -49,11 +51,18 @@ def create_app():
 
 app = create_app()
 
-# 运行FastAPI应用
-if __name__ == "__main__":
+
+def main():
+    log_file_path = path.join(path.dirname(path.abspath(__file__)), '../config/logging.yaml')
     uvicorn.run(
-        app='main:app',
+        app="app.main:app",
         host="0.0.0.0",
         port=app_settings.SERVER_PORT,
-        reload=True
+        reload=True,
+        # log_config=log_file_path,
     )
+
+
+# 运行FastAPI应用
+if __name__ == "__main__":
+    main()

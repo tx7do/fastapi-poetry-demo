@@ -8,6 +8,8 @@ class ApplicationSettings(BaseSettings):
     APP_DESCRIPTION: str = "simple cms"
     SERVER_PORT: int = 8000
 
+    API_ROOTING_V1: str = "/test_api/v1"
+
     # BACKEND_CORS_ORIGINS is a JSON-formatted list of origins
     # e.g: '["http://localhost", "http://localhost:4200", "http://localhost:3000", \
     # "http://localhost:8080", "http://local.dockertoolbox.tiangolo.com"]'
@@ -22,7 +24,8 @@ class ApplicationSettings(BaseSettings):
         raise ValueError(v)
 
     class Config:
-        env_file = ".env.sample"
+        env_file = "config/.env"
+        case_sensitive = True
 
 
 @lru_cache()

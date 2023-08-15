@@ -1,7 +1,10 @@
+import uuid
+
 from tortoise import fields
 from tortoise.contrib.pydantic import pydantic_model_creator, pydantic_queryset_creator
 
-from .base import BaseModel
+from ..dependencies import auth
+from ..dependencies.db import BaseModel
 
 
 class User(BaseModel):
@@ -15,6 +18,20 @@ class User(BaseModel):
 
     class PydanticMeta:
         exclude = ["password"]
+
+    @classmethod
+    async def get_active_user(cls, user_id: int = None, account: str = None):
+        if user_id is not None:
+            return await cls.get_or_none(id=user_id, deleted_at=None)
+        if account is not None:
+            return await cls.get_or_none(account=account, deleted_at=None)
+        return None
+
+    @classmethod
+    def create(cls, **kwargs):
+        kwargs["password"] = auth.get_password_hash(kwargs["password"])
+        kwargs["refresh_token"] = uuid.uuid4().hex
+        return super().create(**kwargs)
 
 
 User_Pydantic = pydantic_model_creator(User)
