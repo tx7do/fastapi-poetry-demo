@@ -13,6 +13,7 @@ class AuthSettings(BaseSettings):
     class Config:
         env_file = "config/.env"
         case_sensitive = True
+        extra = Extra.allow
 
 
 @lru_cache()
