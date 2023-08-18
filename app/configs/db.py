@@ -1,7 +1,6 @@
 from functools import lru_cache
-from typing import Union
 
-from pydantic import Extra, RedisDsn, Field, MariaDBDsn, MySQLDsn, PostgresDsn, MongoDsn
+from pydantic import Extra,  Field
 
 from ..dependencies.pydantic import BaseSettings
 
