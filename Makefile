@@ -7,7 +7,7 @@ deps:
 test: deps
 	pytest
 
-exp: deps
+exp: up
 	@poetry export --output config/requirements.txt
 	@poetry export -f requirements.txt --output config/requirements-prod.txt --without-hashes
 

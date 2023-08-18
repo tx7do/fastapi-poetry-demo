@@ -13,9 +13,9 @@ class DataBaseSettings(BaseSettings):
     PostgreSQL: postgres://postgres:@127.0.0.1:5432/
     """
 
-    DATABASE_DSN: Union[MariaDBDsn, MySQLDsn, PostgresDsn, MongoDsn] = Field(default="")
+    DATABASE_DSN: str = Field(default="")
 
-    REDIS_URL: RedisDsn = Field(default="redis://localhost:6379/0")
+    REDIS_URL: str = Field(default="redis://localhost:6379/0")
 
     class Config:
         env_file = "config/.env"
