@@ -33,6 +33,9 @@ class User(BaseModel):
         kwargs["refresh_token"] = uuid.uuid4().hex
         return super().create(**kwargs)
 
+    def get_access_token(self):
+        return auth.create_access_token(data={"sub": self.id, "account": self.account})
+
 
 User_Pydantic = pydantic_model_creator(User)
 User_Pydantic_List = pydantic_queryset_creator(User)
