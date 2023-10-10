@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel, Field, field_validator
 
-from ..dependencies import validator as validate
+from app.dependencies import validator as validate
 
 
 class RefreshTokenRequest(BaseModel):

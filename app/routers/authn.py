@@ -1,19 +1,13 @@
 import uuid
-from datetime import datetime
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 
-from ..dependencies import auth, exceptions
-from ..dependencies.auth import login_with_password
-from ..models.authn import (
-    RefreshTokenResponse,
-    RefreshTokenRequest,
+from app.schemas.authn import (
     LoginRequest,
     LoginResponse,
-    ManagerLoginResponse,
 )
-from ..models.user import User
+from ..models.user import User, login_with_password
 
 router = APIRouter()
 
@@ -39,7 +33,7 @@ async def get_token_with_password(form_data: OAuth2PasswordRequestForm = Depends
 @router.post("/login", response_model=LoginResponse, summary="前台帳號登入")
 async def login(form_data: LoginRequest):
     # 查詢並且校驗密碼
-    user = await auth.login_with_password(form_data.account, form_data.password)
+    user = await login_with_password(form_data.account, form_data.password)
 
     # 刷新令牌
     if user.refresh_token is None or user.refresh_token == "":

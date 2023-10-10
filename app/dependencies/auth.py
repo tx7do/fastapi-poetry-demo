@@ -1,12 +1,11 @@
 from datetime import datetime, timedelta
 
 import jwt
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 
 from ..configs.auth import get_auth_settings
-from ..models.user import User
 from .exceptions import HTTP_401_UNAUTHORIZED
 
 auth_settings = get_auth_settings()
@@ -24,32 +23,6 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 def get_password_hash(password: str) -> str:
     # print(password, pwd_context.hash(password))
     return pwd_context.hash(password)
-
-
-async def login_with_password(account: str, password: str) -> User:
-    """账号密码登录
-
-    Attributes:
-        account: 账号名
-        password: 明文密码
-    """
-
-    user = await User.get_active_user(account=account)
-
-    if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="账号不存在",
-        )
-
-    if not verify_password(password, user.password):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="账号密码错误",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-
-    return user
 
 
 def create_access_token(*, data: dict) -> str:
@@ -72,7 +45,7 @@ def create_access_token(*, data: dict) -> str:
     return encoded_jwt
 
 
-async def extract_user_token(token: str = Depends(oauth2_scheme)) -> User:
+async def extract_access_token(token: str = Depends(oauth2_scheme)):
     """从JWT令牌中解析出用户信息
 
     :param token: JWT令牌
@@ -85,9 +58,12 @@ async def extract_user_token(token: str = Depends(oauth2_scheme)) -> User:
             auth_settings.AUTH_SECRET_KEY,
             algorithms=[auth_settings.AUTH_ALGORITHM],
         )
-        user = await User.get_active_user(account=payload.get("account"))
+        return payload
+        # user = await User.get_active_user(account=payload.get("account"))
     except jwt.PyJWTError:
         raise HTTP_401_UNAUTHORIZED
-    if not user:
-        raise HTTP_401_UNAUTHORIZED
-    return user
+    # if not user:
+    #     raise HTTP_401_UNAUTHORIZED
+    # return user
+
+

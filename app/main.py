@@ -10,6 +10,7 @@ from tortoise.contrib.fastapi import register_tortoise
 
 from app.configs.app import get_app_settings
 from app.configs.db import get_db_settings
+
 from app.routers import include_router
 
 app_settings = get_app_settings()

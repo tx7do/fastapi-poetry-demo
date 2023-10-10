@@ -1,10 +1,12 @@
 import uuid
 
+import jwt
 from tortoise import fields
-from tortoise.contrib.pydantic import pydantic_model_creator, pydantic_queryset_creator
+from fastapi import HTTPException, status
 
 from ..dependencies import auth
 from ..dependencies.db import BaseModel
+from ..dependencies.exceptions import HTTP_401_UNAUTHORIZED
 
 
 class User(BaseModel):
@@ -37,6 +39,42 @@ class User(BaseModel):
         return auth.create_access_token(data={"sub": self.id, "account": self.account})
 
 
-User_Pydantic = pydantic_model_creator(User)
-User_Pydantic_List = pydantic_queryset_creator(User)
-UserIn_Pydantic = pydantic_model_creator(User, exclude_readonly=True)
+async def login_with_password(account: str, password: str) -> User:
+    """账号密码登录
+
+    Attributes:
+        account: 账号名
+        password: 明文密码
+    """
+
+    user = await User.get_active_user(account=account)
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="账号不存在",
+        )
+
+    if not auth.verify_password(password, user.password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="账号密码错误",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    return user
+
+
+async def extract_user_token() -> User:
+    """从JWT令牌中解析出用户信息
+    :return: 用户信息
+    """
+
+    try:
+        payload = await auth.extract_access_token()
+        user = await User.get_active_user(account=payload.get("account"))
+    except jwt.PyJWTError:
+        raise HTTP_401_UNAUTHORIZED
+    if not user:
+        raise HTTP_401_UNAUTHORIZED
+    return user
