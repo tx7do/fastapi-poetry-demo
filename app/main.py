@@ -40,10 +40,16 @@ def create_app():
     # 注册Tortoise ORM
     register_tortoise(
         _app,
-        db_url=db_settings.DATABASE_DSN,
-        modules={"models": ["app.models"]},
-        generate_schemas=True,
-        add_exception_handlers=True
+        config={
+            "connections": {
+                "default": db_settings.DATABASE_DSN,
+            },
+            "apps": {"models": {"models": ["app.models"]}},
+            "use_tz": False,
+            "timezone": "Asia/Shanghai",
+            "generate_schemas": True,
+            "add_exception_handlers": False,
+        },
     )
 
     return _app
