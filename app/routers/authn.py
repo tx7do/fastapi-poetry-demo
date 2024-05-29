@@ -30,9 +30,9 @@ async def get_token_with_password(form_data: OAuth2PasswordRequestForm = Depends
     )
 
 
-@router.post("/login", response_model=LoginResponse, summary="前台帳號登入")
+@router.post("/login", response_model=LoginResponse, summary="前台账号登录")
 async def login(form_data: LoginRequest):
-    # 查詢並且校驗密碼
+    # 查询并校验密码
     user = await login_with_password(form_data.account, form_data.password)
 
     # 刷新令牌

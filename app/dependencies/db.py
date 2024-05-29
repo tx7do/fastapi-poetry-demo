@@ -6,6 +6,14 @@ from tortoise.queryset import Q
 
 
 def ignore_none(**args):
+    """
+    排除掉None字段
+    Args:
+        **args: 参数列表
+
+    Returns:
+
+    """
     return {key: value for key, value in args.items() if value is not None}
 
 
@@ -21,10 +29,10 @@ def get_ordering_str(value: str, order_cond: str) -> Union[str, None]:
     if order_cond == "desc" or order_cond == "descending" or order_cond == "descend":
         f"-{value}"
     elif (
-        order_cond == "asc"
-        or order_cond == "ascending"
-        or order_cond == "ascend"
-        or order_cond == ""
+            order_cond == "asc"
+            or order_cond == "ascending"
+            or order_cond == "ascend"
+            or order_cond == ""
     ):
         return value
     elif len(value) == 0:
@@ -46,71 +54,71 @@ def reduce_query_filters(args: Tuple[Q, ...]) -> Set:
 
 
 class TimestampMixin:
-    """時間戳混入類
+    """时间戳混入类
 
     Attributes:
-        created_at: 創建時間
-        updated_at: 更新時間
-        deleted_at: 刪除時間
+        created_at: 创建时间
+        updated_at: 更新时间
+        deleted_at: 删除时间
     """
 
-    created_at = fields.DatetimeField(auto_now_add=True, null=True, description="創建時間")
-    updated_at = fields.DatetimeField(auto_now=True, null=True, description="更新時間")
-    deleted_at = fields.DatetimeField(null=True, description="刪除時間")
+    created_at = fields.DatetimeField(auto_now_add=True, null=True, description="创建时间")
+    updated_at = fields.DatetimeField(auto_now=True, null=True, description="更新时间")
+    deleted_at = fields.DatetimeField(null=True, description="删除时间")
 
 
 class NameMixin:
-    """名稱混入類
+    """名称混入类
 
     Attributes:
-        name: 名稱
+        name: 名称
     """
 
-    name = fields.CharField(max_length=50, unique=True, description="名稱")
+    name = fields.CharField(max_length=50, unique=True, description="名称")
 
 
 class CreatorMixin:
-    """創建者混入類
+    """创建者混入类
 
     Attributes:
-        created_by: 創建者帳號名
+        created_by: 创建者账号名
     """
 
-    created_by = fields.CharField(max_length=50, null=True, description="創建者帳號名")
+    created_by = fields.CharField(max_length=50, null=True, description="创建者账号名")
 
 
 class UpdatorMixin:
-    """更新者混入類
+    """更新者混入类
 
     Attributes:
-        updated_by: 更新者帳號名
+        updated_by: 更新者账号名
     """
 
-    updated_by = fields.CharField(max_length=50, null=True, description="更新者帳號名")
+    updated_by = fields.CharField(max_length=50, null=True, description="更新者账号名")
 
 
 class DeleterMixin:
-    """刪除者混入類
+    """删除者混入类
 
     Attributes:
-        deleted_by: 刪除者帳號名
+        deleted_by: 删除者账号名
     """
 
-    deleted_by = fields.CharField(max_length=50, null=True, description="刪除者帳號名")
+    deleted_by = fields.CharField(max_length=50, null=True, description="删除者账号名")
 
 
 class BaseModel(models.Model):
-    """基礎模型
+    """基础模型
 
     Attributes:
-        id: 自增長ID
+        id: 自增长ID
     """
 
     id = fields.IntField(pk=True, description="ID")
 
-    created_at = fields.DatetimeField(auto_now_add=True, null=True, description="創建時間")
-    updated_at = fields.DatetimeField(auto_now=True, null=True, description="更新時間")
-    deleted_at = fields.DatetimeField(null=True, description="刪除時間")
+    created_at = fields.DatetimeField(auto_now_add=True, null=True, description="创建时间")
+    updated_at = fields.DatetimeField(auto_now=True, null=True, description="更新时间")
+    deleted_at = fields.DatetimeField(null=True, description="删除时间")
 
     class Meta:
         abstract = True
@@ -121,7 +129,7 @@ class BaseModel(models.Model):
         optional = ("id",)
 
     async def soft_delete(self):
-        """軟刪除"""
+        """软删除"""
         self.deleted_at = datetime.now()
         await self.save(update_fields=["deleted_at"])
 
