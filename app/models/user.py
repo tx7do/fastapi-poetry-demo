@@ -1,11 +1,12 @@
 import uuid
-
 import jwt
+
 from tortoise import fields
-from fastapi import HTTPException, status
+from fastapi import HTTPException, status, Depends
 
 from ..dependencies import auth
 from ..dependencies.db import BaseModel
+from ..dependencies.auth import oauth2_scheme
 from ..dependencies.exceptions import HTTP_401_UNAUTHORIZED
 
 
@@ -65,16 +66,24 @@ async def login_with_password(account: str, password: str) -> User:
     return user
 
 
-async def extract_user_token() -> User:
+async def get_current_user(token: str):
     """从JWT令牌中解析出用户信息
     :return: 用户信息
     """
 
     try:
-        payload = await auth.extract_access_token()
+        payload = await auth.extract_access_token(token)
         user = await User.get_active_user(account=payload.get("account"))
     except jwt.PyJWTError:
         raise HTTP_401_UNAUTHORIZED
     if not user:
         raise HTTP_401_UNAUTHORIZED
     return user
+
+
+async def extract_user_token(token: str = Depends(oauth2_scheme)) -> User:
+    """从JWT令牌中解析出用户信息
+    :return: 用户信息
+    """
+
+    return await get_current_user(token)

@@ -47,7 +47,7 @@ def create_app():
             },
             "apps": {"models": {"models": ["app.models"]}},
             "use_tz": False,
-            "timezone": "Asia/Shanghai",
+            "timezone": app_settings.TIME_ZONE,
             "generate_schemas": True,
             "add_exception_handlers": False,
         },
